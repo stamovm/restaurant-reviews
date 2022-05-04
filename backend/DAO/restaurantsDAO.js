@@ -17,7 +17,7 @@ export default class RestaurantsDAO {
   static async getRestaurants({
     filters = null,
     page = 0,
-    restaurantsPrrPage = 20,
+    restaurantsPerPage = 20,
   } = {}) {
     let query
     if (filters) {
@@ -37,8 +37,9 @@ export default class RestaurantsDAO {
       console.error(`Unable to issue find command: ${err}`)
       return { restaurantsList: [], totalNumRestaurants: 0 }
     }
-
-    const displayCursor = cursor.limit(restaurantsPerPage).skip(restaurants)
+    const displayCursor = cursor
+      .limit(restaurantsPerPage)
+      .skip(restaurantsPerPage * page)
 
     try {
       const restaurantsList = await displayCursor.toArray()
